@@ -7,20 +7,13 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   return (
-    <>
+    <div>
       <Head>
-        <title>Praktikum Next.js</title>
-        <meta name="description" content="Praktikum PBF Next.js Pages Router" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>Praktikum Next.js Pages Router</title>
       </Head>
-      <main className={styles.main}>
-        <div>
-          <h1>Praktikum Next.js Pages Router</h1>
-          <br />
-          <p>Mahasiswa D4 Pengembangan Web</p>
-        </div>
-      </main>
-    </>
+      <h1>Praktikum Next.js Pages Router</h1>
+      <br />
+      <p>Mahasiswa D4 Pengembangan Web</p>
+    </div>
   )
 }
