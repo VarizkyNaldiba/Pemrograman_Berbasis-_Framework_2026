@@ -10,6 +10,23 @@ type Data = {
     message?: string;
 };
 
+function normalizeImageValue(product: ProductRecord): string {
+    const candidates = [
+        product.image,
+        product.gambar,
+        product.imageUrl,
+        product.image_url,
+        product.foto,
+        product.thumbnail,
+    ];
+
+    const firstImage = candidates.find(
+        (value): value is string => typeof value === "string" && value.trim() !== ""
+    );
+
+    return firstImage || "";
+}
+
 /**
  * API handler for fetching products.
  * Responds with a JSON object containing product data.
@@ -57,8 +74,24 @@ export default async function handler(
             }
         }
 
-        // Ensure response is JSON-serializable for Next.js API response.
-        const data = JSON.parse(JSON.stringify(products)) as ProductRecord[];
+        // Ensure response is JSON-serializable and key fields are normalized for UI consumption.
+        const rawData = JSON.parse(JSON.stringify(products)) as ProductRecord[];
+        const data = rawData.map((product) => ({
+            ...product,
+            name:
+                (typeof product.name === "string" && product.name.trim() !== ""
+                    ? product.name
+                    : typeof product.nama === "string"
+                      ? product.nama
+                      : "Produk tanpa nama"),
+            price: typeof product.price === "number" ? product.price : 0,
+            size: typeof product.size === "string" && product.size.trim() !== "" ? product.size : "-",
+            category:
+                typeof product.category === "string" && product.category.trim() !== ""
+                    ? product.category
+                    : "-",
+            image: normalizeImageValue(product),
+        })) as ProductRecord[];
 
         if (data.length === 0) {
             return res.status(200).json({
