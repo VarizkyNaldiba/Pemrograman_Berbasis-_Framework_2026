@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { productsCollectionName } from "../utils/db/firebase";
-import type { ProductRecord } from "../utils/db/servicefirebase";
-import { retrieveProducts } from "../utils/db/servicefirebase";
+import { productsCollectionName } from "../../utils/db/firebase";
+import type { ProductRecord } from "../../utils/db/servicefirebase";
+import { retrieveProducts } from "../../utils/db/servicefirebase";
 
 type Data = {
     status: boolean;

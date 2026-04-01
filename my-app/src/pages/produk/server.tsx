@@ -1,5 +1,5 @@
-import TampilanProduk from "../views/produk";
-import { ProductType } from "../type/product.type";
+import TampilanProduk from "../../views/produk";
+import { ProductType } from "../../type/product.type";
 
 type PageProps = {
     products: ProductType[];
