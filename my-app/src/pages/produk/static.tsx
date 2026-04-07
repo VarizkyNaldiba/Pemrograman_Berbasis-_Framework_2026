@@ -1,8 +1,8 @@
 import type { GetStaticProps } from "next";
-import type { ProductType } from "../../type/product.type";
-import { productsCollectionName } from "../../utils/db/firebase";
-import { retrieveProducts } from "../../utils/db/servicefirebase";
-import TampilanProduk from "../../views/produk";
+import type { ProductType } from "@/type/product.type";
+import TampilanProduk from "@/views/produk";
+import { productsCollectionName } from "@/utils/db/firebase";
+import { retrieveProducts } from "@/utils/db/servicefirebase";
 
 type ProductRecord = {
     id?: string;
@@ -51,7 +51,7 @@ function toProductType(product: ProductRecord): ProductType {
             : "-";
 
     return {
-        id: String(product.id),
+        id: String(product.id ?? ""),
         name,
         price,
         image,
@@ -73,17 +73,18 @@ export default HalamanProdukStatic;
 export const getStaticProps: GetStaticProps<HalamanProdukStaticProps> = async () => {
     try {
         const records = await retrieveProducts(productsCollectionName);
-
         return {
             props: {
                 products: records.map(toProductType),
             },
+            revalidate: 10,
         };
     } catch {
         return {
             props: {
                 products: [],
             },
+            revalidate: 10,
         };
     }
 };
