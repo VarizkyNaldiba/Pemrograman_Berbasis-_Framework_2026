@@ -2,8 +2,21 @@ import type { GetStaticProps } from "next";
 import type { ProductType } from "../../type/product.type";
 import { productsCollectionName } from "../../utils/db/firebase";
 import { retrieveProducts } from "../../utils/db/servicefirebase";
-import type { ProductRecord } from "../../utils/db/servicefirebase";
 import TampilanProduk from "../../views/produk";
+
+type ProductRecord = {
+    id?: string;
+    name?: string;
+    nama?: string;
+    price?: number;
+    image?: string;
+    gambar?: string;
+    imageUrl?: string;
+    image_url?: string;
+    foto?: string;
+    thumbnail?: string;
+    category?: string;
+};
 
 type HalamanProdukStaticProps = {
     products: ProductType[];

@@ -13,6 +13,7 @@ export default function Home() {
       </Head>
       <h1>Praktikum Next.js Pages Router</h1>
       <br />
+      <p><b>Varizky Naldiba Rimra</b></p>
       <p>Mahasiswa D4 Pengembangan Web</p>
     </div>
   )

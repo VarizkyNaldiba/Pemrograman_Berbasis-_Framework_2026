@@ -1,27 +1,19 @@
-import { collection, getDocs, getFirestore } from "firebase/firestore";
-import app, { firestoreDatabaseId } from "./firebase";
+import { getFirestore, collection, getDocs, getDoc, doc } from "firebase/firestore";
+import app from "./firebase";
 
-const db = getFirestore(app, firestoreDatabaseId);
+const db = getFirestore(app);
 
-export interface ProductRecord {
-    id: string;
-    [key: string]: unknown;
-}
-
-export async function retrieveProducts(
-    collectionName: string
-): Promise<ProductRecord[]> {
-    const normalizedCollectionName = collectionName.trim();
-
-    if (!normalizedCollectionName) {
-        throw new Error("Collection name is required");
-    }
-
-    const snapshot = await getDocs(collection(db, normalizedCollectionName));
-    const data: ProductRecord[] = snapshot.docs.map((doc) => ({
+export async function retrieveProducts(collectionName: string) {
+    const snapshot = await getDocs(collection(db, collectionName));
+    const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
     }));
+    return data;
+}
 
+export async function retrieveDataByID(collectionName: string, id: string) {
+    const snapshot = await getDoc(doc(db, collectionName, id));
+    const data = snapshot.data();
     return data;
 }

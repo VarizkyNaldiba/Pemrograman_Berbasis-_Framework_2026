@@ -1,49 +1,68 @@
 import useSWR from "swr";
+import type { ProductType } from "../../type/product.type";
 import TampilanProduk from "../../views/produk";
 import fetcher from "../../utils/swr/fetcher";
 
-const kategori = () => {
-  const { data, error, isLoading } = useSWR<{
-    data: {
-      id: string;
-      name?: string;
-      nama?: string;
-      price?: number;
-      image?: string;
-      gambar?: string;
-      category?: string;
-    }[];
-  }>(
-    "/api/produk",
-    fetcher
-  );
-
-  const normalizedProducts = (data?.data || []).map((product, index) => ({
-    id: product.id || `produk-${index}`,
-    name: product.name || product.nama || "Produk tanpa nama",
-    price: typeof product.price === "number" ? product.price : 0,
-    image: product.image || product.gambar || "",
-    category: product.category || "-",
-  }));
-
-  if (error) {
-    return (
-      <div style={{ padding: "20px", textAlign: "center" }}>
-        <p style={{ color: "#d32f2f", fontSize: "16px" }}>
-          Gagal memuat data produk. Silakan coba lagi.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <TampilanProduk
-        products={isLoading ? [] : normalizedProducts}
-        isLoading={isLoading}
-      />
-    </div>
-  );
+type ProductRecord = {
+    id?: string;
+    name?: string;
+    nama?: string;
+    price?: number;
+    image?: string;
+    gambar?: string;
+    imageUrl?: string;
+    image_url?: string;
+    foto?: string;
+    thumbnail?: string;
+    category?: string;
 };
 
-export default kategori;
+type ApiResponse = {
+    data?: ProductRecord[];
+};
+
+function toProductType(product: ProductRecord): ProductType {
+    const name =
+        typeof product.name === "string" && product.name.trim() !== ""
+            ? product.name
+            : typeof product.nama === "string" && product.nama.trim() !== ""
+              ? product.nama
+              : "Produk tanpa nama";
+
+    const imageCandidates = [
+        product.image,
+        product.gambar,
+        product.imageUrl,
+        product.image_url,
+        product.foto,
+        product.thumbnail,
+    ];
+
+    const image =
+        imageCandidates.find(
+            (value): value is string => typeof value === "string" && value.trim() !== ""
+        ) || "";
+
+    const category =
+        typeof product.category === "string" && product.category.trim() !== ""
+            ? product.category
+            : "-";
+
+    return {
+        id: String(product.id ?? ""),
+        name,
+        price: typeof product.price === "number" ? product.price : 0,
+        image,
+        category,
+    };
+}
+
+const HalamanProdukCSR = () => {
+    const { data, isLoading } = useSWR<ApiResponse>("/api/produk", fetcher);
+
+    const products = Array.isArray(data?.data) ? data.data.map(toProductType) : [];
+
+    return <TampilanProduk products={products} isLoading={isLoading} />;
+};
+
+export default HalamanProdukCSR;

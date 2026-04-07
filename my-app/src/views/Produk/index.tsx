@@ -1,12 +1,6 @@
 import styles from "../../pages/produk/product.module.scss";
-
-type ProductType = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-};
+import Link from "next/link";
+import type { ProductType } from "../../type/product.type";
 
 type TampilanProdukProps = {
   products: ProductType[];
@@ -31,7 +25,11 @@ const TampilanProduk = ({ products, isLoading = false }: TampilanProdukProps) =>
             ))
           : null}
         {products.map((product) => (
-          <article key={product.id} className={styles.produk__content__item}>
+          <Link
+            key={product.id}
+            href={`/produk/${product.id}`}
+            className={styles.produk__content__item}
+          >
             {product.image ? (
               <img
                 src={product.image}
@@ -47,7 +45,7 @@ const TampilanProduk = ({ products, isLoading = false }: TampilanProdukProps) =>
             <p className={styles.produk__content__item__price}>
               Rp {product.price.toLocaleString()}
             </p>
-          </article>
+          </Link>
         ))}
       </div>
     </section>
