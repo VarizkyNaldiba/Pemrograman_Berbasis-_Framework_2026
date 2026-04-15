@@ -10,7 +10,7 @@ type AppShellProps = {
 const AppShell = (props: AppShellProps) => {
     const { children } = props;
     const { pathname } = useRouter();
-    const isAuthPage = pathname.startsWith("/views/auth/");
+    const isAuthPage = pathname.startsWith("/auth/");
     const shouldHideNavbar = disableNavbar.includes(pathname) || isAuthPage;
 
     return (
