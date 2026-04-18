@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { productsCollectionName } from "../../utils/db/firebase";
-import { retrieveDataByID, retrieveProducts } from "../../utils/db/servicefirebase";
+import { productsCollectionName } from "../../../utils/db/firebase";
+import { retrieveDataByID, retrieveProducts } from "../../../utils/db/servicefirebase";
 
 type ApiResponse = {
     status: boolean;
@@ -13,8 +13,8 @@ export default async function handler(
     res: NextApiResponse<ApiResponse>
 ) {
     try {
-        const params = Array.isArray(req.query.produk) ? req.query.produk : [];
-        const id = params.length > 1 ? params[1] : null;
+        const params = Array.isArray(req.query.slug) ? req.query.slug : [];
+        const id = params.length > 0 ? params[0] : null;
 
         if (id) {
             const data = await retrieveDataByID(productsCollectionName, id);

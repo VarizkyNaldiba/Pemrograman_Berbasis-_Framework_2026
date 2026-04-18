@@ -40,4 +40,9 @@ export const productsCollectionName =
   process.env.NEXT_PUBLIC_FIREBASE_PRODUCTS_COLLECTION ||
   "products";
 
+export const usersCollectionName =
+  process.env.FIREBASE_USERS_COLLECTION ||
+  process.env.NEXT_PUBLIC_FIREBASE_USERS_COLLECTION ||
+  "user";
+
 export default app;

@@ -1,15 +1,14 @@
-import NextAuth from "next-auth";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
-        maxAge: 24 * 60 * 60 // 24 hours
+        maxAge: 24 * 60 * 60,
     },
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
-        signIn: "/auth/login"
+        signIn: "/auth/login",
     },
     providers: [
         CredentialsProvider({
@@ -17,7 +16,7 @@ export const authOptions: NextAuthOptions = {
             credentials: {
                 fullname: { label: "Full Name", type: "text" },
                 email: { label: "Email", type: "email" },
-                password: { label: "Password", type: "password" }
+                password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
@@ -27,12 +26,12 @@ export const authOptions: NextAuthOptions = {
                 const user: any = {
                     id: "1",
                     email: credentials.email,
-                    fullname: credentials.fullname || "User"
+                    fullname: credentials.fullname || "User",
                 };
 
                 return user;
-            }
-        })
+            },
+        }),
     ],
     callbacks: {
         async jwt({ token, user }: any) {
@@ -47,14 +46,12 @@ export const authOptions: NextAuthOptions = {
             if (token?.email) {
                 session.user = {
                     email: token.email,
-                    fullname: token.fullname
+                    fullname: token.fullname,
                 };
             } else {
                 session.user = null;
             }
             return session;
-        }
-    }
+        },
+    },
 };
-
-export default NextAuth(authOptions);
