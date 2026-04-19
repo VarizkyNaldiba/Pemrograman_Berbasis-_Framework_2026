@@ -1,5 +1,7 @@
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { signIn } from "@/utils/db/servicefirebase";
+import bcrypt from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -9,12 +11,13 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: "/auth/login",
+        signOut: "/",
+        error: "/auth/login",
     },
     providers: [
         CredentialsProvider({
             name: "credentials",
             credentials: {
-                fullname: { label: "Full Name", type: "text" },
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" },
             },
@@ -23,13 +26,39 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
 
-                const user: any = {
-                    id: "1",
-                    email: credentials.email,
-                    fullname: credentials.fullname || "User",
-                };
+                const user: any = await signIn(credentials.email);
 
-                return user;
+                if (!user?.password) {
+                    return null;
+                }
+
+                try {
+                    const isPasswordValid = await bcrypt.compare(
+                        credentials.password,
+                        user.password
+                    );
+
+                    if (isPasswordValid) {
+                        return {
+                            id: String(user.id),
+                            email: String(user.email || ""),
+                            fullname: String(user.fullname || user.name || ""),
+                            role: String(user.role || "member").toLowerCase(),
+                        };
+                    }
+                } catch {
+                    // Fallback when password is not stored as bcrypt hash.
+                    if (credentials.password === user.password) {
+                        return {
+                            id: String(user.id),
+                            email: String(user.email || ""),
+                            fullname: String(user.fullname || user.name || ""),
+                            role: String(user.role || "member").toLowerCase(),
+                        };
+                    }
+                }
+
+                return null;
             },
         }),
     ],
@@ -38,19 +67,21 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 token.email = user.email;
                 token.fullname = user.fullname;
+                token.name = user.fullname || user.email;
+                token.role = user.role;
                 token.sub = user.id;
             }
             return token;
         },
         async session({ session, token }: any) {
-            if (token?.email) {
-                session.user = {
-                    email: token.email,
-                    fullname: token.fullname,
-                };
-            } else {
-                session.user = null;
-            }
+            session.user = {
+                ...(session.user || {}),
+                email: token?.email || session.user?.email,
+                name: token?.fullname || token?.name || session.user?.name,
+                fullname: token?.fullname || session.user?.fullname,
+                role: token?.role || session.user?.role,
+            };
+
             return session;
         },
     },

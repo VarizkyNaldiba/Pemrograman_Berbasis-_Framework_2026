@@ -33,7 +33,7 @@ export default async function handler(
     }
 
     try {
-        console.log("🔵 Register API called");
+        console.log("Register API called");
         console.log("Request body:", JSON.stringify(req.body));
         
         const result = await signUp({
@@ -42,16 +42,16 @@ export default async function handler(
             password: normalizedPassword,
         })
         
-        console.log("🟢 SignUp result:", result);
+        console.log("SignUp result:", result);
         
         if (result.status === 'success') {
-            console.log("✅ Registration successful, returning 200");
+            console.log("Registration successful, returning 200");
             return res.status(200).json({ name: result.message, alamat: '', debug: { result } })
         }
-        console.log("❌ Registration failed:", result.message);
+        console.log("Registration failed:", result.message);
         return res.status(400).json({ name: result.message, alamat: '', debug: { result } })
     } catch (error: any) {
-        console.error("🔴 Register API error:", error);
+        console.error("Register API error:", error);
         res.status(500).json({ 
             name: `Error: ${error?.message || 'Unknown error'}`, 
             alamat: '',

@@ -5,6 +5,11 @@ import styles from "./navbar.module.css";
 const Navbar = () => {
 	const { data: session, status } = useSession();
 	const { push } = useRouter();
+	const displayName =
+		(session?.user as any)?.fullname ||
+		session?.user?.name ||
+		session?.user?.email ||
+		"User";
 
 	const handleSignOut = async () => {
 		// Sign out and redirect to home
@@ -19,10 +24,17 @@ const Navbar = () => {
 			<div className={styles.navbar_brand}>MyApp</div>
 
 			<div className={styles.navbar_right}>
-				{status === "authenticated" && session?.user ? (
+				{status === "loading" ? (
+					<button
+						className={`${styles.navbar_button} ${styles["navbar_button--primary"]}`}
+						disabled
+					>
+						Loading...
+					</button>
+				) : status === "authenticated" ? (
 					<>
 						<div className={styles.navbar_user}>
-							Welcome, {(session.user as any)?.fullname || session.user?.email || "User"}
+							Welcome, {displayName}
 						</div>
 						<button
 							className={`${styles.navbar_button} ${styles["navbar_button--danger"]}`}

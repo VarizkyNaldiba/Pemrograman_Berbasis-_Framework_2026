@@ -14,10 +14,10 @@ export default async function handler(
     res: NextApiResponse<Response>
 ) {
     try {
-        console.log("🧪 TEST FIREBASE - Starting");
+        console.log("TEST FIREBASE - Starting");
         
         const db = getFirestore(app);
-        console.log("✅ Firestore initialized");
+        console.log("Firestore initialized");
         
         const testData = {
             email: `test-${Date.now()}@test.com`,
@@ -27,9 +27,9 @@ export default async function handler(
             createdAt: new Date().toISOString(),
         };
         
-        console.log("💾 Saving test data:", testData);
+        console.log("Saving test data:", testData);
         const docRef = await addDoc(collection(db, "users"), testData);
-        console.log("🎉 Successfully saved with ID:", docRef.id);
+        console.log("Successfully saved with ID:", docRef.id);
         
         res.status(200).json({
             status: 'success',
@@ -38,7 +38,7 @@ export default async function handler(
             docId: docRef.id,
         });
     } catch (error: any) {
-        console.error("❌ Test Firebase Error:", error);
+        console.error("Test Firebase Error:", error);
         res.status(500).json({
             status: 'error',
             message: error.message || 'Firebase test failed',
