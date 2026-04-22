@@ -114,11 +114,24 @@ const TampilanLogin = () => {
                     <button className={styles.button} type="submit" disabled={isDisabled}>
                         {isLoading ? "Loading..." : "Login"}
                     </button>
+
+                    <br />
+                    <br />
+
+                    <button
+                        type="button"
+                        className={styles.button}
+                        onClick={() => signIn("google", { callbackUrl: "/", redirect: false })}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? "Loading..." : "Sign in with Google"}
+                    </button>
                 </form>
 
                 <p className={styles.prompt}>
                     Belum punya akun? <Link href="/auth/register">Register</Link>
                 </p>
+
             </section>
         </main>
     );

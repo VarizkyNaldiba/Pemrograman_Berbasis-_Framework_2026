@@ -7,6 +7,7 @@ import {
     query,
     addDoc,
     where,
+    updateDoc,
 } from "firebase/firestore";
 import app, { usersCollectionName } from "./firebase";
 import bcrypt from "bcrypt";
@@ -36,7 +37,7 @@ export async function retrieveDataByID(collectionName: string, id: string) {
 
 export async function signIn(
     email: string
-): Promise<{ id: string; [key: string]: any } | null> {
+): Promise<{ id: string;[key: string]: any } | null> {
     try {
         const q = query(
             collection(db, usersCollectionName), // atau "users" jika mau hardcoded
@@ -122,3 +123,45 @@ export async function signUp(userData: {
         };
     }
 }
+
+export async function signInWithOAuth(userData: any, callback: Function) {
+    try {
+        const q = query(
+            collection(db, usersCollectionName),
+            where("email", "==", userData.email)
+        );
+
+        const querySnapshot = await getDocs(q);
+        const data: any = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+        if (data.length > 0) {
+            // User sudah ada, update data (termasuk image terbaru dari provider)
+            userData.role = data[0].role;
+            await updateDoc(doc(db, usersCollectionName, data[0].id), userData);
+            callback({
+                status: true,
+                message: `User logged in with ${userData.type}`,
+                data: userData,
+            });
+        } else {
+            // User baru, tambah data
+            userData.role = "member";
+            await addDoc(collection(db, usersCollectionName), userData);
+            callback({
+                status: true,
+                message: `User registered with ${userData.type}`,
+                data: userData,
+            });
+        }
+    } catch (error: any) {
+        console.error("OAuth SignIn Firestore Error:", error);
+        callback({
+            status: false,
+            message: "Failed to register user with OAuth",
+        });
+    }
+}
+

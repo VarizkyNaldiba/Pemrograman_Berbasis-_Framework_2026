@@ -1,6 +1,8 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import styles from "./navbar.module.css";
+
 
 const Navbar = () => {
 	const { data: session, status } = useSession();
@@ -35,7 +37,18 @@ const Navbar = () => {
 					<>
 						<div className={styles.navbar_user}>
 							Welcome, {displayName}
+							<Image
+								src={session?.user?.image || `https://ui-avatars.com/api/?name=${displayName}`}
+								alt={displayName}
+								className={styles.navbar_user__image}
+								width={40}
+								height={40}
+								unoptimized={!session?.user?.image}
+							/>
 						</div>
+
+
+
 						<button
 							className={`${styles.navbar_button} ${styles["navbar_button--danger"]}`}
 							onClick={handleSignOut}

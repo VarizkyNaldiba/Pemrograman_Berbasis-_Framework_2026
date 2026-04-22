@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import withAuth from "./middleware/withAuth";
 
-const protectedRoutes = ["/produk", "/about", "/profile", "/setting", "/admin"];
+const protectedRoutes = ["/produk", "/about", "/profile", "/setting", "/admin", "/editor"];
 const roleRules = {
     "/admin": ["admin"],
+    "/editor": ["admin", "editor"],
 };
 
 export const proxy = withAuth(() => {
@@ -11,5 +12,6 @@ export const proxy = withAuth(() => {
 }, protectedRoutes, roleRules);
 
 export const config = {
-    matcher: ["/produk/:path*", "/about/:path*", "/profile/:path*", "/setting/:path*", "/admin/:path*"],
+    matcher: ["/produk/:path*", "/about/:path*", "/profile/:path*", "/setting/:path*", "/admin/:path*", "/editor/:path*"],
 };
+
