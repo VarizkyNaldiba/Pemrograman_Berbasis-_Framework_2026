@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import type { ProductType } from "../../type/product.type";
+import type { ProductType } from "../../types/product.type";
 import TampilanProduk from "../../views/produk";
 import fetcher from "../../utils/swr/fetcher";
 

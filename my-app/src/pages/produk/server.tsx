@@ -1,5 +1,5 @@
 import type { GetServerSideProps } from "next";
-import type { ProductType } from "../../type/product.type";
+import type { ProductType } from "../../types/product.type";
 import TampilanProduk from "../../views/produk";
 
 type PageProps = {

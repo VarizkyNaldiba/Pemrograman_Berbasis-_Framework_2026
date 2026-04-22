@@ -67,21 +67,17 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 token.email = user.email;
                 token.fullname = user.fullname;
-                token.name = user.fullname || user.email;
                 token.role = user.role;
-                token.sub = user.id;
             }
             return token;
         },
         async session({ session, token }: any) {
-            session.user = {
-                ...(session.user || {}),
-                email: token?.email || session.user?.email,
-                name: token?.fullname || token?.name || session.user?.name,
-                fullname: token?.fullname || session.user?.fullname,
-                role: token?.role || session.user?.role,
-            };
-
+            console.log("Session Callback:", { session, token });
+            if (token) {
+                session.user.email = token.email;
+                session.user.fullname = token.fullname;
+                session.user.role = token.role;
+            }
             return session;
         },
     },

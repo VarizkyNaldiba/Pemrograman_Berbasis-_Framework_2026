@@ -1,5 +1,5 @@
 import type { GetStaticProps } from "next";
-import type { ProductType } from "@/type/product.type";
+import type { ProductType } from "@/types/product.type";
 import TampilanProduk from "@/views/produk";
 import { productsCollectionName } from "@/utils/db/firebase";
 import { retrieveProducts } from "@/utils/db/servicefirebase";
