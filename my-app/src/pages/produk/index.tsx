@@ -3,6 +3,7 @@ import type { ProductType } from "../../types/product.type";
 import TampilanProduk from "../../views/produk";
 import fetcher from "../../utils/swr/fetcher";
 
+
 type ProductRecord = {
     id?: string;
     name?: string;
@@ -41,7 +42,7 @@ function toProductType(product: ProductRecord): ProductType {
     const image =
         imageCandidates.find(
             (value): value is string => typeof value === "string" && value.trim() !== ""
-        ) || "";
+        )?.trim() || "";
 
     const category =
         typeof product.category === "string" && product.category.trim() !== ""

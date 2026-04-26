@@ -23,7 +23,7 @@ const Navbar = () => {
 
 	return (
 		<div className={styles.navbar}>
-			<div className={styles.navbar_brand}>MyApp</div>
+			<div className={styles.navbar__brand}>MyApp</div>
 
 			<div className={styles.navbar_right}>
 				{status === "loading" ? (
@@ -41,8 +41,8 @@ const Navbar = () => {
 								src={session?.user?.image || `https://ui-avatars.com/api/?name=${displayName}`}
 								alt={displayName}
 								className={styles.navbar_user__image}
-								width={40}
-								height={40}
+								width={50}
+								height={50}
 								unoptimized={!session?.user?.image}
 							/>
 						</div>

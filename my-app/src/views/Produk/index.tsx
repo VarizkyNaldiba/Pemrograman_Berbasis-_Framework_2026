@@ -1,5 +1,6 @@
 import styles from "../../pages/produk/product.module.scss";
 import Link from "next/link";
+import Image from "next/image";
 import type { ProductType } from "../../types/product.type";
 
 type TampilanProdukProps = {
@@ -31,13 +32,12 @@ const TampilanProduk = ({ products, isLoading = false }: TampilanProdukProps) =>
             className={styles.produk__content__item}
           >
             {product.image ? (
-              <img
+              <Image
                 src={product.image}
                 alt={product.name}
                 className={styles.produk__content__item__image}
                 width={200}
                 height={200}
-                loading="lazy"
               />
             ) : null}
             <h4 className={styles.produk__content__item__name}>{product.name}</h4>

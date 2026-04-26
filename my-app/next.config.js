@@ -11,6 +11,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
       },
       {
         protocol: 'https',
@@ -19,6 +20,19 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'ui-avatars.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.icons8.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
       },
     ],
   },
