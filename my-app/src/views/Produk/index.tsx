@@ -13,7 +13,7 @@ const SKELETON_COUNT = 6;
 const TampilanProduk = ({ products, isLoading = false }: TampilanProdukProps) => {
   return (
     <section className={styles.produk}>
-      <h1 className={styles.produk__title}>Daftar Produk</h1>
+      <h1 className={styles.produk__title} data-testid="title">Daftar Produk</h1>
       <div className={styles.produk__content}>
         {isLoading
           ? Array.from({ length: SKELETON_COUNT }).map((_, index) => (
